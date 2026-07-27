@@ -1,0 +1,34 @@
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv1D, MaxPooling1D
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+
+# Example input shape (187 ECG samples, 1 channel)
+model = Sequential([
+    Conv1D(32, kernel_size=5, activation='relu', input_shape=(187,1)),
+    MaxPooling1D(pool_size=2),
+
+    Conv1D(64, kernel_size=3, activation='relu'),
+    MaxPooling1D(pool_size=2),
+
+    Flatten(),
+
+    Dense(128, activation='relu'),
+    Dropout(0.5),
+
+    Dense(5, activation='softmax')   # 5 heartbeat classes
+])
+
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+model.summary()
+
+# Train
+# model.fit(X_train, y_train,
+#           validation_data=(X_test, y_test),
+#           epochs=20,
+#           batch_size=32)
